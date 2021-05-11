@@ -2,6 +2,10 @@ from django.db import models
 from django.utils.timezone import now
 from PIL import Image
 from django.utils.text import slugify
+from multiselectfield import MultiSelectField
+#from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+
 
 
 
@@ -21,6 +25,12 @@ class Post(models.Model):
         ('Teacher', 'Teacher'),
         ('Student', 'Student'),
     )
+    MEDIUM = (
+        ('Bangla', 'Bangla'),
+        ('English', 'English'),
+        ('Hindi', 'Hindi'),
+        ('Spanis', 'bangla'),
+    )
     title = models.CharField(max_length=100, blank= False)
     slug = models.CharField(max_length=100, default=title)    
     email = models.EmailField(max_length=32, blank= False)    
@@ -30,6 +40,7 @@ class Post(models.Model):
     category = models.CharField(max_length=100, choices=CATEGORY)  
     image = models.ImageField(default='default.jpg', upload_to='tuition/images')
     created_at = models.DateTimeField(default=now)
+    medium=MultiSelectField(max_length=100, max_choices=4, choices=MEDIUM, default='Bangla')
 
     def save(self, *args, **kwargs):
         self.slug=slugify(self.title)
