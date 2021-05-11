@@ -3,8 +3,7 @@ from django.utils.timezone import now
 from PIL import Image
 from django.utils.text import slugify
 from multiselectfield import MultiSelectField
-#from django.contrib.auth.models import User
-#from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 
 
 
@@ -31,6 +30,7 @@ class Post(models.Model):
         ('Hindi', 'Hindi'),
         ('Spanis', 'bangla'),
     )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=100, blank= False)
     slug = models.CharField(max_length=100, default=title)    
     email = models.EmailField(max_length=32, blank= False)    
