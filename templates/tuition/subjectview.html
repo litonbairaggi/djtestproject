@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block body %}
+
+
+
+{{sub.name}} <br>
+
+{% for p in sub.subject_set.all %}
+
+{{p.title}}
+{{p.username}} <br>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Contact, Post
+from .models import Contact, Post, Subject
 from .froms import ContactForm, PostForm
 from django.http.response import HttpResponse
 # Create your views here.
@@ -19,7 +19,17 @@ def postview(request):
     context ={
         'post': post
     }
-    return render(request, 'tuition/postview.html', context) 
+    return render(request, 'tuition/postview.html', context)
+
+#Subject View
+def subview(request):
+    sub = Subject.objects.get(name='English')
+    post =sub.subject_set.all()
+    context ={
+        'sub': sub,
+        'post': post
+    }
+    return render(request, 'tuition/subjectview.html', context) 
 
 #Post Create
 def postcreate(request):

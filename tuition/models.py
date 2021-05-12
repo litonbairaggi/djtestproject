@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 
 
 
-
 # Create your models here.
 
 class Contact(models.Model):
@@ -39,7 +38,7 @@ class Post(models.Model):
         ('Bangla', 'Bangla'),
         ('English', 'English'),
         ('Hindi', 'Hindi'),
-        ('Spanis', 'bangla'),
+        ('Spanis', 'Spanis'),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=100, blank= False)
@@ -62,4 +61,4 @@ class Post(models.Model):
         if img.height > 300 or img.width > 300:
             output_size = (300,300)
             img.thumbnail(output_size)
-            img.save(self.image.path)
+            img.save(self.image.path)       
