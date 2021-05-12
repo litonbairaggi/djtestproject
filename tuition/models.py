@@ -19,6 +19,17 @@ class Contact(models.Model):
     def __str__(self):
         return self.name
 
+class Subject(models.Model):
+    name = models.CharField(max_length=100, blank= False)
+    def __str__(self):
+        return self.name
+
+class Class_in(models.Model):
+    name = models.CharField(max_length=100, blank= False)
+    def __str__(self):
+        return self.name
+    
+
 class Post(models.Model):
     CATEGORY = (
         ('Teacher', 'Teacher'),
@@ -30,7 +41,7 @@ class Post(models.Model):
         ('Hindi', 'Hindi'),
         ('Spanis', 'bangla'),
     )
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=100, blank= False)
     slug = models.CharField(max_length=100, default=title)    
     email = models.EmailField(max_length=32, blank= False)    
@@ -41,6 +52,8 @@ class Post(models.Model):
     image = models.ImageField(default='default.jpg', upload_to='tuition/images')
     created_at = models.DateTimeField(default=now)
     medium=MultiSelectField(max_length=100, max_choices=4, choices=MEDIUM, default='Bangla')
+    subject = models.ManyToManyField(Subject, related_name='subject_set')
+    class_in = models.ManyToManyField(Class_in, related_name='class_set')
 
     def save(self, *args, **kwargs):
         self.slug=slugify(self.title)
