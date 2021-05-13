@@ -3,31 +3,58 @@ from .models import Contact, Post, Subject
 from .froms import ContactForm, PostForm
 from django.http.response import HttpResponse
 from django.views import View
+from django.views.generic import FormView
+from django.urls import reverse_lazy
+
+
 # Create your views here.
     
-class ContactView(View):
+
+class ContactView(FormView):
     form_class = ContactForm
-    template_name = 'contact.html'
-    def get(self, request,*args, **kwargs):
-        # form ta ke context akare pass koray dite hobe
-        form = self.form_class()
-        context ={
-            'form': form
-        }
-        return render(request, self.template_name, context)
-
-    def post(self, request,*args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid(): 
-            form.save()
-            return HttpResponse('success')            
-        context ={
-            'form': form
-        }
-        return render(request, self.template_name, context)
+    template_name = 'contact.html'    
+    success_url='/'
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
 
 
+    def form_invalid(self, form):
+        #ja khush ta likte pari ekhane
 
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('contact')  #  'contact' eta holo ami kon view te jete chasci sei view er name  
+
+
+# Create Class basde View  
+  
+# class ContactView(View):
+#     form_class = ContactForm
+#     template_name = 'contact.html'
+#     def get(self, request,*args, **kwargs):
+#         # form ta ke context akare pass koray dite hobe
+#         form = self.form_class()
+#         context ={
+#             'form': form
+#         }
+#         return render(request, self.template_name, context)
+
+#     def post(self, request,*args, **kwargs):
+#         form = self.form_class(request.POST)
+#         if form.is_valid(): 
+#             form.save()
+#             return HttpResponse('success')            
+#         context ={
+#             'form': form
+#         }
+#         return render(request, self.template_name, context)
+
+
+
+
+# create function based View
 def contact(request):
     if request.method=="POST":
         form = ContactForm(request.POST)
