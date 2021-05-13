@@ -6,6 +6,10 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model=Contact 
         fields ='__all__'
+class ContactFormtwo(forms.ModelForm):
+    class Meta:
+        model=Contact 
+        fields ='__all__'
 
 class PostForm(forms.ModelForm):
     class Meta:

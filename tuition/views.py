@@ -2,8 +2,32 @@ from django.shortcuts import render
 from .models import Contact, Post, Subject
 from .froms import ContactForm, PostForm
 from django.http.response import HttpResponse
+from django.views import View
 # Create your views here.
     
+class ContactView(View):
+    form_class = ContactForm
+    template_name = 'contact.html'
+    def get(self, request,*args, **kwargs):
+        # form ta ke context akare pass koray dite hobe
+        form = self.form_class()
+        context ={
+            'form': form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request,*args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid(): 
+            form.save()
+            return HttpResponse('success')            
+        context ={
+            'form': form
+        }
+        return render(request, self.template_name, context)
+
+
+
 def contact(request):
     if request.method=="POST":
         form = ContactForm(request.POST)
