@@ -3,7 +3,7 @@ from .models import Contact, Post, Subject
 from .froms import ContactForm, PostForm
 from django.http.response import HttpResponse
 from django.views import View
-from django.views.generic import FormView, CreateView, ListView
+from django.views.generic import FormView, CreateView, ListView, DetailView
 from django.urls import reverse_lazy
 
 
@@ -75,7 +75,17 @@ class PostListView(ListView):
         context["posts"] = context.get('object_list') 
         context["mess"] = 'This is post list'
         return context
-    
+
+
+class PostDetailView(DetailView):
+    model = Post 
+    template_name = 'tuition/postdetail.html'
+    #extra context pass korte hoy e vabe
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["posts"] = context.get('object') 
+        context["mess"] = 'This is post detail view'
+        return context
 
 #post View function besed
 def postview(request):
