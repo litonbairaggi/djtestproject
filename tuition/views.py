@@ -3,7 +3,7 @@ from .models import Contact, Post, Subject
 from .froms import ContactForm, PostForm
 from django.http.response import HttpResponse
 from django.views import View
-from django.views.generic import FormView, CreateView
+from django.views.generic import FormView, CreateView, ListView
 from django.urls import reverse_lazy
 
 
@@ -64,13 +64,27 @@ def contact(request):
         form = ContactForm()    
     return render(request, 'contact.html', {'form': form})
 
-#post View
+class PostListView(ListView):
+    #model = Post 
+    queryset = Post.objects.filter(user=2)
+    template_name = 'tuition/postlist.html'
+    context_object_name = 'posts'
+    #extra context pass korte hoy e vabe
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["posts"] = context.get('object_list') 
+        context["mess"] = 'This is post list'
+        return context
+    
+
+#post View function besed
 def postview(request):
     post = Post.objects.all()
     context ={
         'post': post
     }
     return render(request, 'tuition/postview.html', context)
+
 
 #Subject View
 def subview(request):
