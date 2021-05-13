@@ -3,7 +3,7 @@ from .models import Contact, Post, Subject
 from .froms import ContactForm, PostForm
 from django.http.response import HttpResponse
 from django.views import View
-from django.views.generic import FormView
+from django.views.generic import FormView, CreateView
 from django.urls import reverse_lazy
 
 
@@ -13,7 +13,7 @@ from django.urls import reverse_lazy
 class ContactView(FormView):
     form_class = ContactForm
     template_name = 'contact.html'    
-    success_url='/'
+    #success_url='/'
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
@@ -82,7 +82,22 @@ def subview(request):
     }
     return render(request, 'tuition/subjectview.html', context) 
 
-#Post Create
+
+#Post Create Class based View (it's better)
+class PostCreateView(CreateView):
+    model = Post 
+    form_class = PostForm
+    template_name = 'tuition/postcreate.html'
+    #success_url = '/'
+    def form_invalid(self, form):
+        form.instance.user = self.request.user    
+        return super().form_valid(form)     
+    def get_success_url(self):  # if success
+        #id = self.object.id  
+        return reverse_lazy('tuition:subjects')   # tuition= appName & subjects = url path
+
+
+#Post Create function based view (It's not use)
 def postcreate(request):
     if request.method=="POST":
         #request.FILES use of image file for include
