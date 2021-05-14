@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import contact, postview, postcreate, subview, ContactView, PostCreateView, PostListView, PostDetailView
+from .views import contact, postview, postcreate, subview, ContactView, PostCreateView, PostListView, PostDetailView, PostEditView
 from .froms import ContactFormtwo
 
 app_name="tuition"
@@ -11,6 +11,7 @@ urlpatterns = [
     path('posts/',postview,name="posts"),
     path('postlist/',PostListView.as_view(),name="postlist"),
     path('postdetail/<int:pk>/',PostDetailView.as_view(),name="postdetail"),
+    path('edit/<int:pk>/',PostEditView.as_view(),name="edit"),
     path('subjects/',subview,name="subjects"),
     # path('create/',postcreate,name="create"),
     path('create/',PostCreateView.as_view(),name="create"),

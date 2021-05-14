@@ -3,7 +3,7 @@ from .models import Contact, Post, Subject
 from .froms import ContactForm, PostForm
 from django.http.response import HttpResponse
 from django.views import View
-from django.views.generic import FormView, CreateView, ListView, DetailView
+from django.views.generic import FormView, CreateView, ListView, DetailView, UpdateView
 from django.urls import reverse_lazy
 
 
@@ -66,7 +66,8 @@ def contact(request):
 
 class PostListView(ListView):
     #model = Post 
-    queryset = Post.objects.filter(user=2)
+    #queryset = Post.objects.filter(user=1)
+    queryset = Post.objects.all()
     template_name = 'tuition/postlist.html'
     context_object_name = 'posts'
     #extra context pass korte hoy e vabe
@@ -119,6 +120,15 @@ class PostCreateView(CreateView):
     def get_success_url(self):  # if success
         #id = self.object.id  
         return reverse_lazy('tuition:subjects')   # tuition= appName & subjects = url path
+
+#Post Update Class based View
+class PostEditView(UpdateView):
+    model = Post 
+    form_class = PostForm
+    template_name = 'tuition/postcreate.html'    
+    def get_success_url(self):  # if success
+        id = self.object.id  
+        return reverse_lazy('tuition:postdetail', kwargs={'pk': id})
 
 
 #Post Create function based view (It's not use)
