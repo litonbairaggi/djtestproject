@@ -8,13 +8,30 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model=Contact 
         fields ='__all__'
+    # initials value included for forms    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label='My name'
+        self.fields['name'].initial='My name is '
+        self.fields['phone'].initial='+8801'
+        self.fields['content'].initial='My problem is'
+
+    def clean_name(self):
+        value=self.cleaned_data.get('name')
+        num_of_w=value.split(' ')
+        if len(num_of_w) > 4:
+            self.add_error('name', 'Name can have maximum of 4 words')    
+        else:
+            return value
+            
+
         widgets={
             'name':forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter your name'}),
             'phone':forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter your phone'}),
             'content':forms.Textarea(attrs={'class':'form-control', 'placeholder':'Say somthing', 'rows':8})
         }
         labels={
-            'name':'Your name',
+            'name':'Your name',  
             'phone':'Your phone',
             'content':'Your words'
         }

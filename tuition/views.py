@@ -5,27 +5,25 @@ from django.http.response import HttpResponse
 from django.views import View
 from django.views.generic import FormView, CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 
 # Create your views here.
-    
-
 class ContactView(FormView):
     form_class = ContactForm
     template_name = 'contact.html'    
     #success_url='/'
     def form_valid(self, form):
         form.save()
+        messages.info(self.request, 'Form successfully submitted!')
         return super().form_valid(form)
-
 
     def form_invalid(self, form):
         #ja khush ta likte pari ekhane
-
-        return super().form_valid(form)
+        return super().form_invalid(form)
 
     def get_success_url(self):
-        return reverse_lazy('contact')  #  'contact' eta holo ami kon view te jete chasci sei view er name  
+        return reverse_lazy('homeview')  #  'contact' eta holo ami kon view te jete chasci sei view er name  
 
 
 # Create Class basde View  
@@ -56,12 +54,17 @@ class ContactView(FormView):
 
 # create function based View
 def contact(request):
+    initials={
+        'name':'My name is',
+        'phone':'+8801',
+        'content':'My problem is'
+    }
     if request.method=="POST":
-        form = ContactForm(request.POST)
+        form = ContactForm(request.POST, initial=initials)
         if form.is_valid(): 
             form.save()
     else:
-        form = ContactForm()    
+        form = ContactForm(initial=initials)    
     return render(request, 'contact.html', {'form': form})
 
 class PostListView(ListView):
