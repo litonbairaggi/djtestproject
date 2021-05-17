@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Contact, Post, Subject
+from .models import Contact, Post, Subject, Class_in
 from .froms import ContactForm, PostForm
 from django.http.response import HttpResponse
 from django.views import View
@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.db.models import Q
 
+# function based method is Searching
 def search(request):
     query =request.POST.get('search', '')
     if query:
@@ -19,6 +20,31 @@ def search(request):
         'results': results
     }        
     return render(request, 'tuition/search.html', context)
+
+def filter(request):
+    if request.method=="POST":
+        subject= request.POST['subject']   
+        class_in= request.POST['class_in']  
+        salary_from= request.POST['salary_from']  
+        salary_to= request.POST['salary_to']  
+        available= request.POST['available']  
+        if subject or class_in:
+            queryset =(Q(subject__name__icontains=subject)) & (Q(class_in__name__icontains=class_in)) 
+            results =Post.objects.filter(queryset).distinct() 
+            if available:
+                results=results.filter(available=True)
+            if salary_from:
+                results = results.filter(salary__gte=salary_from)    
+            if salary_to:
+                results = results.filter(salary__lte=salary_to)    
+        else:
+            results =[]  
+
+        context={
+        'results': results
+        }        
+        return render(request, 'tuition/search.html', context)   
+
 
 # Create your views here.
 class ContactView(FormView):
@@ -89,7 +115,9 @@ class PostListView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["posts"] = context.get('object_list') 
-        context["mess"] = 'This is post list'
+        # context["mess"] = 'This is post list'
+        context['subjects']= Subject.objects.all()
+        context['classes']= Class_in.objects.all()
         return context
 
 
