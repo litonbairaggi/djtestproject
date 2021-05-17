@@ -25,6 +25,13 @@ def loginuser(request):
     context={
         'form': form
     }    
-    return render(request, 'session/login.html', context)            
+    return render(request, 'session/login.html', context)   
+
+
+
+def logoutuser(request):
+    logout(request)
+    messages.success(request, 'Successfully Logged Out!')
+    return redirect('homeview')            
                    
 
