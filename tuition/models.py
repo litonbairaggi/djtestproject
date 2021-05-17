@@ -5,8 +5,6 @@ from django.utils.text import slugify
 from multiselectfield import MultiSelectField
 from django.contrib.auth.models import User
 
-
-
 # Create your models here.
 
 class Contact(models.Model):
