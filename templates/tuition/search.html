@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container">
+
+<h1>{{mess}} </h1><br><br>
+{% for p in results %}
+<div class="col-md-6 offset-md-2 mb-3 p-3 border">
+Title: {{p.title}} <br>
+by {{p.user.username}} <hr>
+
+Detail: {{p.details}} 
+
+<a href="/tuition/postdetail/{{p.pk}}">...Read More</a> 
+
+</div>
+{% endfor %}
+</div>
+
+{% endblock body %}
+
+
+
