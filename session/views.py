@@ -59,7 +59,7 @@ def registration(request):
             email.send()
             messages.success(request, 'Successfully created account')
 
-            return redirect('session:login')
+            return redirect('login')
     else:
         form=SignUpForm()
     return render(request, 'session/signup.html', {'form': form})  
